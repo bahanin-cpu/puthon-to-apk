@@ -12,7 +12,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
       - run: pip install buildozer "cython<3" setuptools
-      - run: yes | buildozer -v android debug
+      - name: Build with retries
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i"
+            yes | buildozer -v android debug && exit 0
+            sleep 60
+          done
+          exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: apk
