@@ -24,9 +24,14 @@ def find_font():
 class MyApp(App):
     def build(self):
         font = find_font()
+        numbers = [13, 7, 3, 5]
+        total = sum(numbers)
+        average = total / len(numbers)
+
         box = BoxLayout(orientation="vertical", padding=20, spacing=10)
         box.add_widget(Label(text=fa("سلام خوبی"), font_name=font, font_size=32))
-        box.add_widget(Label(text="Sum of 13 and 7 and 3 and 5 is 28", font_size=24))
+        box.add_widget(Label(text=f"Sum of 13 and 7 and 3 and 5 is {total}", font_size=24))
+        box.add_widget(Label(text=f"Average of them is {average:g}", font_size=24))
         box.add_widget(Label(text=fa("خدانگهدار"), font_name=font, font_size=32))
         return box
 
