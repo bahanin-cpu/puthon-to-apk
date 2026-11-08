@@ -14,10 +14,21 @@ jobs:
       - run: pip install buildozer "cython<3" setuptools
       - name: Build
         run: |
-          yes | buildozer android debug > build.log 2>&1 || true
-          tail -n 60 build.log
+          ok=0
+          for i in 1 2 3 4 5 6 7 8; do
+            echo "=== Attempt $i ==="
+            if buildozer android debug >> build.log 2>&1; then
+              ok=1
+              break
+            fi
+            tail -n 3 build.log | cut -c1-200
+            sleep 20
+          done
+          tail -n 40 build.log | cut -c1-300
           ls bin || true
+          [ "$ok" = "1" ]
       - uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: apk
           path: bin/*.apk
